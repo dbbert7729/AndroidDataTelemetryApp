@@ -15,7 +15,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.DataAquisition.Alpha1.DialogFragments.AddGaugeDialog;
+import com.DataAquisition.Alpha1.DialogFragments.AddWidgetDialog;
 import com.DataAquisition.Alpha1.R;
 
 public class SettingsFragment extends Fragment {
@@ -61,8 +61,8 @@ public class SettingsFragment extends Fragment {
                 public boolean onPreferenceClick(Preference preference)
                 {
                     FragmentManager fm = myContext.getSupportFragmentManager();
-                    AddGaugeDialog addGaugeDialog = AddGaugeDialog.newInstance("Hello");
-                    addGaugeDialog.show(fm,"dialogtest");
+                    AddWidgetDialog addWidgetDialog = AddWidgetDialog.newInstance("Hello");
+                    addWidgetDialog.show(fm,"add_widget_dialog");
                     return true;
                 }
             });

@@ -8,14 +8,14 @@
     android:orientation="horizontal">
 
 
-    <com.DataAquisition.Alpha1.RoundGauge
+    <com.DataAquisition.Alpha1.Widgets.RoundGauge
         android:id="@+id/GasGauge"
         android:layout_width="393dp"
         android:layout_height="245dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.DataAquisition.Alpha1.RoundGauge
+    <com.DataAquisition.Alpha1.Widgets.RoundGauge
         android:id="@+id/gasGauge2"
         android:layout_width="397dp"
         android:layout_height="236dp"

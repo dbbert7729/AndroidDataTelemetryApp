@@ -12,8 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.Preference;
 
+import com.DataAquisition.Alpha1.HelperClasses.DataConnector;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         dataConnector = new DataConnector();
+        dataConnector.execute();
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

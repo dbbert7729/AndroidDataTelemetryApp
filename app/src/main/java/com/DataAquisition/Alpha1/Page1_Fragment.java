@@ -1,20 +1,22 @@
 package com.DataAquisition.Alpha1;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.DataAquisition.Alpha1.HelperClasses.DataConnector;
+import com.DataAquisition.Alpha1.Widgets.RoundGauge;
+import com.DataAquisition.Alpha1.Widgets.SmallBarGraph;
 
 public class Page1_Fragment extends Fragment{
 public static RoundGauge gasGauge = null;
@@ -33,10 +35,11 @@ public static RoundGauge gasGauge = null;
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.page1_fragment_layout,container,false);
         rootView.setBackgroundColor(Color.BLACK);
         RecyclerView page1RecyclerView = (RecyclerView)rootView.findViewById(R.id.page1RecyclerView);
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(),PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref",null));
-        page1RecyclerView.setAdapter(recyclerAdapter);
-        page1RecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref",null)!=null) {
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter((MainActivity) getActivity(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref", null), getContext());
+            page1RecyclerView.setAdapter(recyclerAdapter);
+            page1RecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
         return rootView;
     }
 }
@@ -44,6 +47,7 @@ public static RoundGauge gasGauge = null;
 class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
 {
     private String[] mDataset;
+    private MainActivity mainActivity;
     private Context mContext;
     private LayoutInflater mInflater;
 
@@ -56,8 +60,9 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
         }
     }
 
-    public RecyclerAdapter(Context context, String myDataset) {
+    public RecyclerAdapter(MainActivity mainActivity, String myDataset, Context context) {
         mDataset = myDataset.split(",");
+        mainActivity = mainActivity;
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -71,13 +76,28 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
-        if(mDataset[position].split(":")[2].equals("RoundGauge"))
+        if(mDataset[position].split(":")[2].equals("RoundGauge"))//Add RoundGauge Widget
         {
             RoundGauge gauge = new RoundGauge(mContext);
             gauge.setText(mDataset[position].split(":")[0]);
             holder.linearLayout.addView(gauge);
+            //Add to the DataConnector class so the widget can be updated from a seperate thread.
+            DataConnector.WidgetObjStruct struct = new DataConnector.WidgetObjStruct();
+            struct.widgetObj = gauge;
+            struct.input = Integer.parseInt(mDataset[position].split(":")[1]);
+            this.mainActivity.dataConnector.addWidgetObject(struct);
         }
-
+        else if(mDataset[position].split(":")[2].equals("SmallBarGraph"))//Add SmallBarGraph Widget
+        {
+            SmallBarGraph smallBarGraph = new SmallBarGraph(mContext);
+            smallBarGraph.setNameAndUnit(mDataset[position].split(":")[0],"|UNIT|");
+            holder.linearLayout.addView(smallBarGraph);
+            //Add to the DataConnector class so the widget can be updated from a seperate thread.
+            DataConnector.WidgetObjStruct struct = new DataConnector.WidgetObjStruct();
+            struct.widgetObj = smallBarGraph;
+            struct.input = Integer.parseInt(mDataset[position].split(":")[1]);
+            this.mainActivity.dataConnector.addWidgetObject(struct);
+        }
     }
 
     @Override

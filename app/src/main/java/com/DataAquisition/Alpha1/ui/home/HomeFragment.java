@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.DataAquisition.Alpha1.Chart_Fragment;
-import com.DataAquisition.Alpha1.DataConnector;
+import com.DataAquisition.Alpha1.Page2_Fragment;
+import com.DataAquisition.Alpha1.HelperClasses.DataConnector;
 import com.DataAquisition.Alpha1.Page1_Fragment;
 import com.DataAquisition.Alpha1.R;
 
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
  */
 class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     public static Page1_Fragment page1_fragment_Instance = null;
-    public static Chart_Fragment chart_fragment_Instance = null;
+    public static Page2_Fragment page2_fragment_Instance = null;
     private static HomeFragment mainActivity = null;
     public ScreenSlidePagerAdapter(FragmentManager fm, HomeFragment mainActivity) {
         super(fm);
@@ -63,9 +63,9 @@ class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         }
         else if(position ==1)
         {
-            chart_fragment_Instance = new Chart_Fragment();
-            this.mainActivity.dataConnector.chartFragment = chart_fragment_Instance;
-            return chart_fragment_Instance;
+            page2_fragment_Instance = new Page2_Fragment();
+            this.mainActivity.dataConnector.chartFragment = page2_fragment_Instance;
+            return page2_fragment_Instance;
         }
         page1_fragment_Instance = new Page1_Fragment();
         return page1_fragment_Instance;
