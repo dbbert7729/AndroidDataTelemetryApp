@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +39,7 @@ public static RoundGauge gasGauge = null;
         if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref",null)!=null) {
             RecyclerAdapter recyclerAdapter = new RecyclerAdapter((MainActivity) getActivity(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref", null), getContext());
             page1RecyclerView.setAdapter(recyclerAdapter);
-            page1RecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            page1RecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         }
         return rootView;
     }

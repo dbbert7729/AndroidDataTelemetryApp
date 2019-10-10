@@ -36,7 +36,7 @@ public class RoundGauge extends View
         //Draw White Outline Rectangle
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.WHITE);
-        canvas.drawRect(0,0,getWidth(),getHeight(),paint);
+        //canvas.drawRect(0,0,getWidth(),getHeight(),paint);
         //Draw Gauge
         RectF r = new RectF((getWidth()/2)-350,(getHeight()/2)-350,(getWidth()/2)+350,(getHeight()/2)+350);
 

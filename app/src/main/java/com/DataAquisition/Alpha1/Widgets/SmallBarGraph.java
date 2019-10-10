@@ -36,7 +36,7 @@ public class SmallBarGraph extends View
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(10);
         paint.setColor(Color.YELLOW);
-        canvas.drawRect(0,0,canvas.getWidth(),canvas.getHeight(),paint);
+        //canvas.drawRect(0,0,canvas.getWidth(),canvas.getHeight(),paint);
         //Draw Scale Lines and Scale Numbers
         paint.setStrokeWidth(4);
         paint.setTextSize(50);
