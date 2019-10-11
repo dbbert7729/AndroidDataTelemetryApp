@@ -14,7 +14,27 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class LargeGauge extends View {
+    public String Name = "";
+    public float value = 0;
+
+    public void setName(String newName)
+    {
+        Name = newName;
+    }
+
+    public void setValue(float newValue)
+    {
+        value = newValue;
+        this.invalidate();
+    }
+
+    public LargeGauge(Context context)
+    {
+        super(context);
+    }
+
     public LargeGauge(Context context, AttributeSet attrs) {
+
         super(context, attrs);
     }
     float count = 0;
@@ -53,8 +73,8 @@ public class LargeGauge extends View {
         paint.setTextSize(125);
         paint.setTextAlign(Paint.Align.CENTER);
         //Draw the Needle
-        float x1 = (float) (((outerRect.width()/2)-0)*Math.cos(count));
-        float y1 = (float) (((outerRect.width()/2)-0)*Math.sin(count));
+        float x1 = (float) (((outerRect.width()/2)-0)*Math.cos(this.value));
+        float y1 = (float) (((outerRect.width()/2)-0)*Math.sin(this.value));
         canvas.drawLine(outerRect.centerX(),outerRect.centerY(),outerRect.centerX()+x1,outerRect.centerY()+y1,paint);
         int numCount = 0;
         for(double i = -Math.PI/6; i < Math.PI+Math.PI/6; i = i + Math.PI /6)
@@ -73,15 +93,8 @@ public class LargeGauge extends View {
         }
 
         //Draw Gauge Name
-        canvas.drawText("NAME",outerRect.centerX(),outerRect.centerY()+400,paint);
+        canvas.drawText(this.Name,outerRect.centerX(),outerRect.centerY()+400,paint);
 
-        count = count + 0.1f;
-        try {
-            Thread.sleep(50);
-            this.invalidate();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.DataAquisition.Alpha1.Page1_Fragment;
 import com.DataAquisition.Alpha1.Page2_Fragment;
+import com.DataAquisition.Alpha1.Widgets.LargeGauge;
 import com.DataAquisition.Alpha1.Widgets.RoundGauge;
 import com.DataAquisition.Alpha1.Widgets.SmallBarGraph;
 import com.github.mikephil.charting.charts.LineChart;
@@ -85,8 +86,8 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
     @Override
     protected Float doInBackground(Float... params)
     {
-        int INPUT_1 = 0;
-        int INPUT_4 = 50;
+        int INPUT_0 = 0;
+        float INPUT_4 = 50;
         while(true)
         {
             for(int index = 0; index < this.widgetObjects.size(); index++)
@@ -96,9 +97,9 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
                     if(widgetObjStruct.widgetObj.getClass().equals(RoundGauge.class)) {
                         if (widgetObjStruct.input == 0) {
                             RoundGauge gauge = (RoundGauge) widgetObjStruct.widgetObj;
-                            gauge.setValue(INPUT_1);
-                            INPUT_1++;
-                            INPUT_1 = INPUT_1 % 100;
+                            gauge.setValue(INPUT_0);
+                            INPUT_0++;
+                            INPUT_0 = INPUT_0 % 100;
                         }
 
                         if (widgetObjStruct.input == 4) {
@@ -111,9 +112,9 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
                     if(widgetObjStruct.widgetObj.getClass().equals(SmallBarGraph.class)) {
                         if (widgetObjStruct.input == 0) {
                             SmallBarGraph smallBarGraph = (SmallBarGraph) widgetObjStruct.widgetObj;
-                            smallBarGraph.setValue(INPUT_1);
-                            INPUT_1++;
-                            INPUT_1 = INPUT_1 % 100;
+                            smallBarGraph.setValue(INPUT_0);
+                            INPUT_0++;
+                            INPUT_0 = INPUT_0 % 100;
                         }
 
                         if (widgetObjStruct.input == 4) {
@@ -123,10 +124,20 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
                             INPUT_4 = INPUT_4 % 550;
                         }
                     }
+                    if(widgetObjStruct.widgetObj.getClass().equals(LargeGauge.class))
+                    {
+                        if(widgetObjStruct.input == 0) {
+                            LargeGauge largeGauge = (LargeGauge) widgetObjStruct.widgetObj;
+                            largeGauge.setName("Rpm");
+                            INPUT_0++;
+                            INPUT_0 = INPUT_0 % 100;
+                            largeGauge.setValue(INPUT_0);
+                        }
+                    }
                 }
                 try
                 {
-                    Thread.sleep(50);
+                    Thread.sleep(5);
                 } catch (InterruptedException e)
                 {
                     e.printStackTrace();

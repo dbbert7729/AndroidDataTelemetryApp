@@ -58,6 +58,8 @@ public  class AddWidgetDialog extends DialogFragment {
                     case R.id.radio_SmallBarGraph:
                         gaugeType = "SmallBarGraph";
                         break;
+                    case R.id.radio_LargeGauge:
+                        gaugeType = "LargeGauge";
                 }
             }
         });

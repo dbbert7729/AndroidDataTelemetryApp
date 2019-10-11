@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DataAquisition.Alpha1.HelperClasses.DataConnector;
+import com.DataAquisition.Alpha1.Widgets.LargeGauge;
 import com.DataAquisition.Alpha1.Widgets.RoundGauge;
 import com.DataAquisition.Alpha1.Widgets.SmallBarGraph;
 
 public class Page1_Fragment extends Fragment{
-public static RoundGauge gasGauge = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,14 +32,13 @@ public static RoundGauge gasGauge = null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.page1_fragment_layout,container,false);
         rootView.setBackgroundColor(Color.BLACK);
         RecyclerView page1RecyclerView = (RecyclerView)rootView.findViewById(R.id.page1RecyclerView);
         if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref",null)!=null) {
             RecyclerAdapter recyclerAdapter = new RecyclerAdapter((MainActivity) getActivity(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref", null), getContext());
             page1RecyclerView.setAdapter(recyclerAdapter);
-            page1RecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+            page1RecyclerView.setLayoutManager(new GridLayoutManager(getContext(),1));
         }
         return rootView;
     }
@@ -96,6 +95,17 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
             //Add to the DataConnector class so the widget can be updated from a seperate thread.
             DataConnector.WidgetObjStruct struct = new DataConnector.WidgetObjStruct();
             struct.widgetObj = smallBarGraph;
+            struct.input = Integer.parseInt(mDataset[position].split(":")[1]);
+            this.mainActivity.dataConnector.addWidgetObject(struct);
+        }
+        else if(mDataset[position].split(":")[2].equals("LargeGauge"))//Add a LargeGauge to the layout
+        {
+            LargeGauge largeGauge = new LargeGauge(mContext);
+            largeGauge.setName(mDataset[position].split(":")[0]);
+            holder.linearLayout.addView(largeGauge);
+            //Add to the DataConnector class so the widget can be updated from a seperate thread.
+            DataConnector.WidgetObjStruct struct = new DataConnector.WidgetObjStruct();
+            struct.widgetObj = largeGauge;
             struct.input = Integer.parseInt(mDataset[position].split(":")[1]);
             this.mainActivity.dataConnector.addWidgetObject(struct);
         }

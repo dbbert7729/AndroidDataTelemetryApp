@@ -41,6 +41,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Small Bar Graph" />
+
+        <RadioButton
+            android:id="@+id/radio_LargeGauge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Gauge" />
+
     </RadioGroup>
 
     <Button
