@@ -3,11 +3,13 @@ package com.DataAquisition.Alpha1.Widgets;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,7 +17,7 @@ public class LargeGauge extends View {
     public LargeGauge(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    int count = 0;
+    float count = 0;
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
@@ -24,68 +26,58 @@ public class LargeGauge extends View {
         paint.setColor(Color.GREEN);
 
         RectF outerRect = new RectF(50,50,canvas.getWidth()-50,canvas.getWidth()-50);
-        RectF innerRect = new RectF(outerRect.left+150, outerRect.top+150,outerRect.right-150,outerRect.bottom-150);
-
-        Path path = new Path();
-        int arc_sweep = +180;
-        int arc_ofset = 180;
-        path.arcTo(outerRect,arc_ofset,arc_sweep);
-        path.arcTo(innerRect,arc_ofset+arc_sweep,-arc_sweep);
-        path.close();
-        //canvas.drawRect(innerRect,paint);
+        RectF innerRect = new RectF(outerRect.left+300, outerRect.top+300,outerRect.right-300,outerRect.bottom-300);
         //canvas.drawRect(outerRect,paint);
-        Paint fill = new Paint();
-        fill.setStrokeWidth(3);
-        fill.setStyle(Paint.Style.STROKE);
-        fill.setColor(Color.GREEN);
-        //canvas.drawPath(path,fill);
-        //Draw more detail
-
-        path = new Path();
-        count++;
-        arc_sweep = +count;
-        count = count %180;
-        arc_ofset = 180;
-
-        outerRect.left = outerRect.left +5;
-        outerRect.top = outerRect.top + 5;
-        outerRect.right = outerRect.right -5;
-        outerRect.bottom = outerRect.bottom - 5;
-        innerRect.left = innerRect.left -5;
-        innerRect.top = innerRect.top - 5;
-        innerRect.right = innerRect.right +5;
-        innerRect.bottom = innerRect.bottom + 5;
-
-        path.arcTo(outerRect,arc_ofset,arc_sweep);
-        path.arcTo(innerRect,arc_ofset+arc_sweep,-arc_sweep);
-        path.close();
-        fill.setStyle(Paint.Style.FILL);
-        fill.setColor(Color.rgb(0,255,150));
-        canvas.drawPath(path,fill);
-        paint.setStrokeWidth(2);
-        for(int i = 1; i < 12; i++)
-        {
-            paint.setColor(Color.YELLOW);
-            canvas.rotate(15, innerRect.centerX(), innerRect.centerY());
-            canvas.drawLine(innerRect.left,innerRect.centerY(),outerRect.left,outerRect.centerY(), paint);
-        }
-        canvas.setMatrix(new Matrix());
-        for(int i = 1; i < 6; i++)
-        {
-            paint.setColor(Color.RED);
-            canvas.rotate(30, innerRect.centerX(), innerRect.centerY());
-            canvas.drawLine(innerRect.left+35,innerRect.centerY(),outerRect.left-35,outerRect.centerY(), paint);
-        }
-        //Draw the Value and Units
-        canvas.setMatrix(new Matrix());
-        paint.setTextAlign(Paint.Align.CENTER);
+        //canvas.drawRect(innerRect,paint);
+        Path circle = new Path();
+        circle.addArc(outerRect,0,360);
+        canvas.drawPath(circle,paint);
         paint.setTextSize(150);
-        canvas.drawText(String.valueOf(count),innerRect.centerX(),innerRect.centerY(),paint);
+        canvas.drawLine(outerRect.left,outerRect.centerY(),outerRect.left+75,outerRect.centerY(),paint);
+        canvas.rotate(-30,outerRect.centerX(),outerRect.centerY());
+        paint.setColor(Color.YELLOW);
+        for(int i = 0; i < 49; i++)
+        {
+            canvas.drawLine(outerRect.left,outerRect.centerY(),outerRect.left+50,outerRect.centerY(),paint);
+            canvas.rotate(5,outerRect.centerX(),outerRect.centerY());
+        }
+        canvas.setMatrix(new Matrix());
+        paint.setStrokeWidth(paint.getStrokeWidth()+2);
+        paint.setColor(Color.BLUE);
+        for(int i = 0; i < 8; i++)
+        {
+            canvas.drawLine(outerRect.left,outerRect.centerY(),outerRect.left+75,outerRect.centerY(),paint);
+            canvas.rotate(30,outerRect.centerX(),outerRect.centerY());
+        }
+        canvas.setMatrix(new Matrix());
+        paint.setTextSize(125);
+        paint.setTextAlign(Paint.Align.CENTER);
+        //Draw the Needle
+        float x1 = (float) (((outerRect.width()/2)-0)*Math.cos(count));
+        float y1 = (float) (((outerRect.width()/2)-0)*Math.sin(count));
+        canvas.drawLine(outerRect.centerX(),outerRect.centerY(),outerRect.centerX()+x1,outerRect.centerY()+y1,paint);
+        int numCount = 0;
+        for(double i = -Math.PI/6; i < Math.PI+Math.PI/6; i = i + Math.PI /6)
+        {
 
+            Rect bounds = new Rect();
+            paint.getTextBounds(String.valueOf(5),0,String.valueOf(5).length(),bounds);
+            float x = (float) (((outerRect.width()/2)-150)*Math.cos(i));
+            float y = (float) (((outerRect.width()/2)-150)*Math.sin(i));
+            x = x*-1;
+            y = y*-1;
+            //canvas.drawLine(outerRect.centerX(),outerRect.centerY(),outerRect.centerX()+x,outerRect.centerY()+y,paint);
+            paint.setColor(Color.RED);
+            canvas.drawText(String.valueOf(numCount),outerRect.centerX()+x-bounds.centerX()+30,outerRect.centerY()+y-bounds.centerY()+0,paint);
+            numCount++;
+        }
 
+        //Draw Gauge Name
+        canvas.drawText("NAME",outerRect.centerX(),outerRect.centerY()+400,paint);
 
+        count = count + 0.1f;
         try {
-            Thread.sleep(5);
+            Thread.sleep(50);
             this.invalidate();
         } catch (InterruptedException e) {
             e.printStackTrace();
