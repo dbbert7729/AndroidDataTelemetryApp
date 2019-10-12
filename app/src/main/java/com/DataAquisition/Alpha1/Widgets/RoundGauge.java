@@ -13,9 +13,14 @@ public class RoundGauge extends View
 {
     private float gaugeValue = 0.0f;
     private String gaugeName = "TEST";
+
+    public RoundGauge(Context context, AttributeSet attrs)
+    {
+        super(context,attrs);
+    }
+
     public RoundGauge(Context context) {
         super(context);
-
     }
 
     public void setValue(float value)

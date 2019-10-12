@@ -1,8 +1,11 @@
 package com.DataAquisition.Alpha1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ import com.DataAquisition.Alpha1.Widgets.LargeGauge;
 import com.DataAquisition.Alpha1.Widgets.RoundGauge;
 import com.DataAquisition.Alpha1.Widgets.SmallBarGraph;
 
+import static java.security.AccessController.getContext;
+
 public class Page1_Fragment extends Fragment{
 
     @Override
@@ -36,9 +41,10 @@ public class Page1_Fragment extends Fragment{
         rootView.setBackgroundColor(Color.BLACK);
         RecyclerView page1RecyclerView = (RecyclerView)rootView.findViewById(R.id.page1RecyclerView);
         if(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref",null)!=null) {
-            RecyclerAdapter recyclerAdapter = new RecyclerAdapter((MainActivity) getActivity(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref", null), getContext());
+            MainActivity mainActivity = (MainActivity)getActivity();
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(mainActivity, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("gaugeLayoutPref", null), getContext());
             page1RecyclerView.setAdapter(recyclerAdapter);
-            page1RecyclerView.setLayoutManager(new GridLayoutManager(getContext(),1));
+            page1RecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         }
         return rootView;
     }
@@ -47,7 +53,7 @@ public class Page1_Fragment extends Fragment{
 class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
 {
     private String[] mDataset;
-    private MainActivity mainActivity;
+    public MainActivity mainActivity;
     private Context mContext;
     private LayoutInflater mInflater;
 
@@ -60,9 +66,9 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
         }
     }
 
-    public RecyclerAdapter(MainActivity mainActivity, String myDataset, Context context) {
+    public RecyclerAdapter(MainActivity MAIN_ACTIVITY, String myDataset, Context context) {
         mDataset = myDataset.split(",");
-        mainActivity = mainActivity;
+        mainActivity = MAIN_ACTIVITY;
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -102,12 +108,19 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
         {
             LargeGauge largeGauge = new LargeGauge(mContext);
             largeGauge.setName(mDataset[position].split(":")[0]);
+            ViewGroup.LayoutParams layoutParams = holder.linearLayout.getLayoutParams();
+            layoutParams.height = 1500;
+            layoutParams.width = 1400;
+            holder.linearLayout.setLayoutParams(layoutParams);
             holder.linearLayout.addView(largeGauge);
             //Add to the DataConnector class so the widget can be updated from a seperate thread.
             DataConnector.WidgetObjStruct struct = new DataConnector.WidgetObjStruct();
             struct.widgetObj = largeGauge;
             struct.input = Integer.parseInt(mDataset[position].split(":")[1]);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            mainActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             this.mainActivity.dataConnector.addWidgetObject(struct);
+
         }
     }
 

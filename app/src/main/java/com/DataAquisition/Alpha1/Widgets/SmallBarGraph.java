@@ -58,6 +58,7 @@ public class SmallBarGraph extends View
         canvas.drawText(Unit,canvas.getWidth()*0.93f,canvas.getHeight()*.93f,paint);
         //Draw Bar
         //when Value = canvas.getHeight()*.76f the bar is 0 height.
+        paint.setColor(Color.YELLOW);
         canvas.drawRect((canvas.getWidth()/2)-75,canvas.getHeight()*.76f-Value,(canvas.getWidth()/2)+75,canvas.getHeight()*.76f,paint);
     }
 

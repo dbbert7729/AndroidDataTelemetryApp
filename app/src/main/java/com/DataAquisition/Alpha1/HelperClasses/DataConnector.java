@@ -87,7 +87,7 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
     protected Float doInBackground(Float... params)
     {
         int INPUT_0 = 0;
-        float INPUT_4 = 50;
+        float INPUT_1 = 50;
         while(true)
         {
             for(int index = 0; index < this.widgetObjects.size(); index++)
@@ -102,11 +102,11 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
                             INPUT_0 = INPUT_0 % 100;
                         }
 
-                        if (widgetObjStruct.input == 4) {
+                        if (widgetObjStruct.input == 1) {
                             RoundGauge gauge = (RoundGauge) widgetObjStruct.widgetObj;
-                            gauge.setValue(INPUT_4);
-                            INPUT_4++;
-                            INPUT_4 = INPUT_4 % 100;
+                            gauge.setValue(INPUT_1);
+                            INPUT_1++;
+                            INPUT_1 = INPUT_1 % 100;
                         }
                     }
                     if(widgetObjStruct.widgetObj.getClass().equals(SmallBarGraph.class)) {
@@ -117,11 +117,11 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
                             INPUT_0 = INPUT_0 % 100;
                         }
 
-                        if (widgetObjStruct.input == 4) {
+                        if (widgetObjStruct.input == 1) {
                             SmallBarGraph smallBarGraph = (SmallBarGraph) widgetObjStruct.widgetObj;
-                            smallBarGraph.setValue(INPUT_4);
-                            INPUT_4 = INPUT_4 + 25;
-                            INPUT_4 = INPUT_4 % 550;
+                            smallBarGraph.setValue(INPUT_1);
+                            INPUT_1 = INPUT_1 + 25;
+                            INPUT_1 = INPUT_1 % 550;
                         }
                     }
                     if(widgetObjStruct.widgetObj.getClass().equals(LargeGauge.class))
@@ -132,6 +132,13 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
                             INPUT_0++;
                             INPUT_0 = INPUT_0 % 100;
                             largeGauge.setValue(INPUT_0);
+                        }
+                        else if(widgetObjStruct.input == 1) {
+                            LargeGauge largeGauge = (LargeGauge) widgetObjStruct.widgetObj;
+                            largeGauge.setName("Rpm");
+                            INPUT_1++;
+                            INPUT_1 = INPUT_1 % 100;
+                            largeGauge.setValue(INPUT_1);
                         }
                     }
                 }
