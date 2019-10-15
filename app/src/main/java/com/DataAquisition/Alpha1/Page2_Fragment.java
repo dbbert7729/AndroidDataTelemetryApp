@@ -29,9 +29,7 @@ public class Page2_Fragment extends Fragment{
         widgetObjStruct.input = 3;
         widgetObjStruct.widgetObj = largeGauge;
         mainActivity.dataConnector.addWidgetObject(widgetObjStruct);
-        RoundGauge roundGauge = new RoundGauge(getContext());
-        LinearLayout linearLayout = rootView.findViewById(R.id.page2Layout);
-        linearLayout.addView(roundGauge);
+
         return rootView;
     }
 }
