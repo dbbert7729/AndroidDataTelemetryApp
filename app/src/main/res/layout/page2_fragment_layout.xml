@@ -16,11 +16,11 @@
 
     <com.DataAquisition.Alpha1.Widgets.Table
         android:id="@+id/Page2TableWidget"
-        android:layout_width="407dp"
-        android:layout_height="137dp"
+        android:layout_width="410dp"
+        android:layout_height="168dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="8dp">
+        tools:layout_editor_absoluteX="5dp">
 
     </com.DataAquisition.Alpha1.Widgets.Table>
 
