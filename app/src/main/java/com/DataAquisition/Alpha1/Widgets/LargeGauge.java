@@ -67,7 +67,7 @@ public class LargeGauge extends View {
         canvas.setMatrix(new Matrix());
         paint.setStrokeWidth(paint.getStrokeWidth()+2);
         paint.setColor(Color.BLUE);
-        for(int i = 0; i < 8; i++)
+        for(int i = 0; i < 7; i++)
         {
             canvas.drawLine(outerRect.left,outerRect.centerY(),outerRect.left+75,outerRect.centerY(),paint);
             canvas.rotate(30,outerRect.centerX(),outerRect.centerY());
