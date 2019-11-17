@@ -52,7 +52,7 @@ public class RoundGauge extends View
         paint.setColor(Color.GREEN);
         canvas.drawArc(r,-70,-110,false,paint);
         //Draw Text
-        paint.setTextSize(150);
+        paint.setTextSize(140);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.create("Roboto", Typeface.ITALIC));
         canvas.drawText(this.gaugeName,canvas.getWidth()/2,(canvas.getHeight()/2)+250,paint);

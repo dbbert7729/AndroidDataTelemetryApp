@@ -17,14 +17,12 @@ public class Table extends View {
     {
         super(context,attrs);
         this.dataMap = new HashMap<String,Object>();
-        this.dataMap.put("Oil",55);
-        this.dataMap.put("Temp",150);
-        this.dataMap.put("TEST",155);
     }
 
-    public void setValue(String Row, String Value)
+    public void setValue(String Row, int Value)
     {
         this.dataMap.put(Row,Value);
+        this.invalidate();
     }
     public Table(Context context) {
         super(context);
@@ -49,9 +47,9 @@ public class Table extends View {
             Rect bounds = new Rect();
             paint.getTextBounds(entry.getKey(),0,entry.getKey().length(),bounds);
             //Draw the Name
-            canvas.drawText(entry.getKey(),centerX,centerY+bounds.centerY(),paint);
+            canvas.drawText(entry.getKey(),centerX,centerY+bounds.centerY()+(bounds.centerY()/2),paint);
             //Draw the Value
-            canvas.drawText(String.valueOf(entry.getValue()),centerX+(canvas.getWidth()/2),centerY+bounds.centerY(),paint);
+            canvas.drawText(String.valueOf(entry.getValue()),centerX+(canvas.getWidth()/2),centerY+bounds.centerY()+(bounds.centerY()/2),paint);
             canvas.drawLine(0,lineCount*((canvas.getHeight()/this.dataMap.size())),canvas.getWidth(),lineCount*(canvas.getHeight()/this.dataMap.size()),paint);
             lineCount++;
         }

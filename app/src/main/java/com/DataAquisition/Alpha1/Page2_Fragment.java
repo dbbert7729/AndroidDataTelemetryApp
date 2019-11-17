@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.DataAquisition.Alpha1.HelperClasses.DataConnector;
 import com.DataAquisition.Alpha1.Widgets.LargeGauge;
 import com.DataAquisition.Alpha1.Widgets.RoundGauge;
+import com.DataAquisition.Alpha1.Widgets.Table;
 
 public class Page2_Fragment extends Fragment{
 
@@ -26,10 +27,14 @@ public class Page2_Fragment extends Fragment{
         LargeGauge largeGauge = (LargeGauge)rootView.findViewById(R.id.largeGauge);
         MainActivity mainActivity = (MainActivity)getActivity();
         DataConnector.WidgetObjStruct widgetObjStruct = new DataConnector.WidgetObjStruct();
-        widgetObjStruct.input = 3;
+        widgetObjStruct.input = 0;
         widgetObjStruct.widgetObj = largeGauge;
         mainActivity.dataConnector.addWidgetObject(widgetObjStruct);
-
+        Table table = rootView.findViewById(R.id.Page2TableWidget);
+        DataConnector.WidgetObjStruct tableObjectStruct = new DataConnector.WidgetObjStruct();
+        tableObjectStruct.widgetObj = table;
+        tableObjectStruct.input = 0;
+        mainActivity.dataConnector.addWidgetObject(tableObjectStruct);
         return rootView;
     }
 }
