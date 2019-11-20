@@ -84,8 +84,8 @@ public class UsbSerialProber {
      *         {@code null} if none available.
      */
     public UsbSerialDriver probeDevice(final UsbDevice usbDevice) {
-        final int vendorId = usbDevice.getVendorId();
-        final int productId = usbDevice.getProductId();
+        final int vendorId = 9025;
+        final int productId = 67;
 
         final Class<? extends UsbSerialDriver> driverClass =
                 mProbeTable.findDriver(vendorId, productId);
