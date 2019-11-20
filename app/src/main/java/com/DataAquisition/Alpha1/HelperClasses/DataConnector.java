@@ -43,6 +43,7 @@ public class DataConnector extends AsyncTask<Float,Float,Float> {
     public DataConnector()
     {
         widgetObjects = new ArrayList<WidgetObjStruct>();
+
     }
 
     public void addWidgetObject(WidgetObjStruct obj)
