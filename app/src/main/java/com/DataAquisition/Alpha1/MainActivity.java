@@ -27,6 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
+import com.hoho.android.usbserial.util.SerialInputOutputManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +43,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        dataConnector = new DataConnector();
+        try {
+            dataConnector = new DataConnector(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         dataConnector.execute();
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -56,43 +61,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        UsbManager manager = (UsbManager)getSystemService(Context.USB_SERVICE);
-
-        List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(manager);
-        UsbSerialDriver driver = availableDrivers.get(0);
-
-        final Boolean[] granted = {null};
-        BroadcastReceiver usbReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                granted[0] = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
-            }
-        };
-
-        PendingIntent permissionIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("com.android.example.USB_PERMISSION"), 0);
-        IntentFilter filter = new IntentFilter("com.android.example.USB_PERMISSION");
-        getApplicationContext().registerReceiver(usbReceiver, filter);
-        manager.requestPermission(driver.getDevice(),permissionIntent);
-
-        UsbDeviceConnection connection = manager.openDevice(driver.getDevice());
-        if(connection == null)
-        {
-
-        }
-
-        UsbSerialPort port = driver.getPorts().get(0);
-        try {
-            port.open(connection);
-            port.setParameters(9600, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-            byte buffer[] = new byte[16];
-            while(true) {
-                port.write("hello".getBytes(),5);
-                int i = 0;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
