@@ -32,12 +32,8 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
- * Updates Widgets on Fragments
+ * Provides a mechanism to connect to a uC; Updates Widgets on Fragments
  *
- * @param  url  an absolute URL giving the base location of the image
- * @param  name the location of the image, relative to the url argument
- * @return      the image at the specified URL
- * @see         Image
  */
 
 public class DataConnector extends AsyncTask<Float,Float,Float> implements SerialInputOutputManager.Listener {
@@ -45,6 +41,9 @@ public class DataConnector extends AsyncTask<Float,Float,Float> implements Seria
     LineChart chart;
     public static Page2_Fragment chartFragment = null;
     public static Page1_Fragment page1_fragment = null;
+
+    float DATA_CHANNEL_0 = 0;
+    float DATA_CHANNEL_1 = 50;
 
     @Override
     public void onNewData(byte[] data) {
@@ -71,6 +70,7 @@ public class DataConnector extends AsyncTask<Float,Float,Float> implements Seria
     List<WidgetObjStruct> widgetObjects;
     public DataConnector(Context context) throws IOException {
         widgetObjects = new ArrayList<WidgetObjStruct>();
+        //Setup USB device
         UsbManager manager = (UsbManager)context.getSystemService(Context.USB_SERVICE);
         List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(manager);
         UsbSerialDriver driver = availableDrivers.get(0);
@@ -94,6 +94,7 @@ public class DataConnector extends AsyncTask<Float,Float,Float> implements Seria
         usbSerialPort.setDTR(true);
         usbSerialPort.setRTS(true);
         SerialInputOutputManager inputOutputManager = new SerialInputOutputManager(usbSerialPort,this);
+        //Start the receiving thread for serial
         Executors.newSingleThreadExecutor().submit(inputOutputManager);
     }
 
@@ -106,47 +107,13 @@ public class DataConnector extends AsyncTask<Float,Float,Float> implements Seria
     protected void onProgressUpdate(Float... params)//Update Respective Elements
     {
         super.onProgressUpdate(params);
-
-        int COUNT = 0;
-        for(int index = 0; index < this.widgetObjects.size(); index++)
-        {
-            WidgetObjStruct widgetObjStruct = this.widgetObjects.get(index);
-            if(widgetObjStruct.widgetObj.getClass().equals(RoundGauge.class))
-            {
-                RoundGauge gauge = (RoundGauge)widgetObjStruct.widgetObj;
-                gauge.setValue(COUNT);
-            }
-            if(widgetObjStruct.widgetObj.getClass().equals(LargeGauge.class))
-            {
-                LargeGauge gauge = (LargeGauge)widgetObjStruct.widgetObj;
-                gauge.setValue(COUNT);
-            }
-        }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    float[] processMessageString(String message)
-    {
-        String[] Strvalues = message.split(",");
-        float[] fltValues = new float[Strvalues.length];
-        for(int index = 0; index < Strvalues.length; index++)
-        {
-            fltValues[index] = Float.parseFloat(Strvalues[index]);
-        }
-        return fltValues;
     }
 
     @SuppressLint("WrongThread")
     @Override
     protected Float doInBackground(Float... params)
     {
-        float INPUT_0 = 0;
-        float INPUT_1 = 50;
+
         while(true)
         {
             for(int index = 0; index < this.widgetObjects.size(); index++)
@@ -156,48 +123,48 @@ public class DataConnector extends AsyncTask<Float,Float,Float> implements Seria
                     if(widgetObjStruct.widgetObj.getClass().equals(RoundGauge.class)) {
                         if (widgetObjStruct.input == 0) {
                             RoundGauge gauge = (RoundGauge) widgetObjStruct.widgetObj;
-                            gauge.setValue(INPUT_0);
-                            //INPUT_0++;
-                            INPUT_0 = INPUT_0 % 100;
+                            gauge.setValue(DATA_CHANNEL_0);
+                            //DATA_CHANNEL_0++;
+                            DATA_CHANNEL_0 = DATA_CHANNEL_0 % 100;
                         }
 
                         if (widgetObjStruct.input == 1) {
                             RoundGauge gauge = (RoundGauge) widgetObjStruct.widgetObj;
-                            gauge.setValue(INPUT_1);
-                            INPUT_1++;
-                            INPUT_1 = INPUT_1 % 100;
+                            gauge.setValue(DATA_CHANNEL_1);
+                            DATA_CHANNEL_1++;
+                            DATA_CHANNEL_1 = DATA_CHANNEL_1 % 100;
                         }
                     }
                     if(widgetObjStruct.widgetObj.getClass().equals(SmallBarGraph.class)) {
                         if (widgetObjStruct.input == 0) {
                             SmallBarGraph smallBarGraph = (SmallBarGraph) widgetObjStruct.widgetObj;
-                            smallBarGraph.setValue(INPUT_0);
-                            //INPUT_0++;
-                            INPUT_0 = INPUT_0 % 100;
+                            smallBarGraph.setValue(DATA_CHANNEL_0);
+                            //DATA_CHANNEL_0++;
+                            DATA_CHANNEL_0 = DATA_CHANNEL_0 % 100;
                         }
 
                         if (widgetObjStruct.input == 1) {
                             SmallBarGraph smallBarGraph = (SmallBarGraph) widgetObjStruct.widgetObj;
-                            smallBarGraph.setValue(INPUT_1);
-                            INPUT_1 = INPUT_1 + 25;
-                            INPUT_1 = INPUT_1 % 550;
+                            smallBarGraph.setValue(DATA_CHANNEL_1);
+                            DATA_CHANNEL_1 = DATA_CHANNEL_1 + 25;
+                            DATA_CHANNEL_1 = DATA_CHANNEL_1 % 550;
                         }
                     }
                     if(widgetObjStruct.widgetObj.getClass().equals(LargeGauge.class))
                     {
                         if(widgetObjStruct.input == 0) {
                             LargeGauge largeGauge = (LargeGauge) widgetObjStruct.widgetObj;
-                            largeGauge.setName(String.valueOf(INPUT_0));
-                            INPUT_0 = INPUT_0 + 0.001f;
-                            //INPUT_0 = INPUT_0 % 100;
-                            largeGauge.setValue(INPUT_0);
+                            largeGauge.setName(String.valueOf(DATA_CHANNEL_0));
+                            DATA_CHANNEL_0 = DATA_CHANNEL_0 + 0.001f;
+                            //DATA_CHANNEL_0 = DATA_CHANNEL_0 % 100;
+                            largeGauge.setValue(DATA_CHANNEL_0);
                         }
                         else if(widgetObjStruct.input == 1) {
                             LargeGauge largeGauge = (LargeGauge) widgetObjStruct.widgetObj;
                             largeGauge.setName("Rpm");
-                            INPUT_1++;
-                            INPUT_1 = INPUT_1 % 100;
-                            largeGauge.setValue(INPUT_1);
+                            DATA_CHANNEL_1++;
+                            DATA_CHANNEL_1 = DATA_CHANNEL_1 % 100;
+                            largeGauge.setValue(DATA_CHANNEL_1);
                         }
                     }
                     if(widgetObjStruct.widgetObj.getClass().equals(Table.class))
@@ -205,9 +172,9 @@ public class DataConnector extends AsyncTask<Float,Float,Float> implements Seria
                         if(widgetObjStruct.input == 0)
                         {
                             Table table = (Table)widgetObjStruct.widgetObj;
-                            INPUT_0 = INPUT_0 + 1;
-                            table.setValue("Value", (int)INPUT_0);
-                            table.setValue("Trans", (int)INPUT_0);
+                            DATA_CHANNEL_0 = DATA_CHANNEL_0 + 1;
+                            table.setValue("Value", (int)DATA_CHANNEL_0);
+                            table.setValue("Trans", (int)DATA_CHANNEL_0);
                         }
                     }
                 }
