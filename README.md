@@ -1,6 +1,6 @@
 # DataTelemetry_Android
-![Home Screen](https://drive.google.com/file/d/1SN0LXRdXjfXVCkSWcKjejvm8igFmaUtf/view?usp=sharing)
-![Page 2]()
+![Home Screen](https://github.com/dbbert7729/AndroidDataTelemetryApp/blob/temp/AppPic1_1_30.png)
+![Page 2](https://github.com/dbbert7729/AndroidDataTelemetryApp/blob/temp/AppPic2_30.png)
 
 ## Overview
   A simple application to display data from a microcontroller connected via USB. Using a simple serial commands the microcontroller sends data to the phone via channels; for example, if a given microcontroller has 4 analog inputs, one may provide 4 channels of data to the Android device. Using these channels the user can dynamically add widgets as they see fit by using another form on the application.
